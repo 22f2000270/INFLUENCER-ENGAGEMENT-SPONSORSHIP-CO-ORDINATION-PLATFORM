@@ -1,0 +1,22 @@
+<!-- application/templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Engagement and Sponsorship Coordination Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1> <h1>Welcome to the Influencer Engagement and Sponsorship Coordination Platform</h1></h1>
+        <h2>Login Links:</h2>
+        <ul>
+            <li><a href="{{ url_for('login') }}">Admin Login</a></li>
+            <li><a href="{{ url_for('login1') }}">Sponsor Login</a></li>
+            <li><a href="{{ url_for('login2') }}">Influencer Login</a></li>
+        </ul>
+    </div>
+</body>
+</html>

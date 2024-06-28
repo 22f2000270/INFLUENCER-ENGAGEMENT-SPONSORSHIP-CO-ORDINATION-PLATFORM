@@ -1,0 +1,112 @@
+<!-- application/templates/sponsor_dashboard.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Dashboard</title>
+<!-- Include Bootstrap CSS from CDN -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+    
+   
+    <h1>Welcome {{username}}</h1>
+    
+   
+    
+    <form action="{{ url_for('search_influencers',username=username) }}" method="GET">
+        <input type="text" name="query" placeholder="Search for influencers">
+        <button type="submit">Search</button>
+    </form>
+   
+    <h2>Influencers List</h2>
+    <a href="{{url_for('campaign_status')}}">Check for campaign status</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Influencer Name</th>
+                <th>Category</th>
+                <th>Niche</th>
+                <th>Reach</th>
+                <th> </th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if influencers  %}
+        <h2>Search Results</h2>
+            {% for influencer in influencers %}
+            <tr>
+                <td>{{ loop.index }}</td>  <!-- Index of the current iteration -->
+                <td>{{ influencer.username2 }}</td>
+                <td>{{ influencer.category }}</td>
+                <td>{{ influencer.niche }}</td>
+                <td>{{ influencer.reach }}</td>
+                
+                <td>
+                    <a href="{{ url_for('Request', id=influencer.id) }}" class="btn btn-primary">Request for campaign</a>
+                </td>
+                <td>{{influencer.is_flagged}}</td>
+            </tr>
+            {% endfor %}
+        
+    {% endif %}
+            {% for influencer in i %}
+            <tr>
+                <td>{{ loop.index }}</td>  <!-- Index of the current iteration -->
+                <td>{{ influencer.username2 }}</td>
+                <td>{{ influencer.category }}</td>
+                <td>{{ influencer.niche }}</td>
+                <td>{{ influencer.reach }}</td>
+               
+                <td>
+                    <a href="{{ url_for('Request', id=influencer.id) }}" class="btn btn-primary">Request for campaign</a>
+                </td>
+                <td>{{influencer.is_flagged}}</td>
+            </tr>
+
+            {% endfor %}
+           
+        </tbody>
+    </table>
+    <div class="container">
+        <h2>Create Campaign</h2>
+        <form method="POST">
+            {{ form.hidden_tag()}}
+            <div class="form-group">
+                <label for="name">Campaign Name</label>
+                {{ form.name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                {{ form.description(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="start_date">Start Date</label>
+                {{ form.start_date(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="end_date">End Date</label>
+                {{ form.end_date(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="budget">Budget</label>
+                {{ form.budget(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="visibility">Visibility</label>
+                {{ form.visibility(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="goals">Goals</label>
+                {{ form.goals(class="form-control") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Create Campaign</button>
+        </form>
+    </div>
+</body>
+</html>

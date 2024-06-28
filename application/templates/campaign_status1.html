@@ -1,0 +1,114 @@
+<!-- application/templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Engagement and Sponsorship Coordination Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    
+        <h1>Reqests from this campaign</h1>
+
+        <table class="custom-table">
+            <thead>
+                <tr><th>#</th>
+                    <th>influencer name</th>
+                    <th>Requirements</th>
+                    <th>Payment</th>
+                    <th>Edit or Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {%for b in a%}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{b.influencer.username2}}</td>
+                    <td>{{b.requirements}}</td>
+                    <td>{{b.payment_amount}}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('delete_campaign1', id=b.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+
+        </table>
+
+        <h1>Request Responses from influencers</h1>
+        <table class="custom-table">
+        <thead>
+            <tr><th>#</th>
+                <th>influencer name</th>
+                <th>category</th>
+                <th>response status</th>
+                <th>Message from Influencer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for i in a%}
+            <tr><td>{{loop.index}}</td>
+                <td>{{i.influencer.username2}}</td>
+                <td>{{i.influencer.category}}</td>
+                <td>{{i.status}}</td>
+                <td>
+                    {% if i.m %}
+                    {% for msg in i.m %}
+                        {% if msg.influencer_id == i.influencer_id %}
+                            {{ msg.message }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    no message
+                {% endif %}
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>    
+
+
+    </table>
+    <table class="custom-table">
+        <h1>Request sent from influencers</h1>
+        <thead>
+            <tr><th>#</th>
+                <th>influencer name</th>
+                <th>campaign name</th>
+                <th>response status</th>
+                <th>Message from Influencer</th>
+                <th>Accept or reject</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for x in b%}
+            <tr><td>{{loop.index}}</td>
+                <td>{{x.influencer.username2}}</td>
+                <td>{{x.campaign.name}}</td>
+                <td>{{x.status}}</td>
+                <td>{{x.message}}</td>
+                <td>
+                    {% if x.status == 'pending' %}  
+
+                                    <form method="POST" action="{{ url_for('accept_ad_request1', id=x.id) }}">
+                                        <button type="submit" class="btn btn-success">Accept</button>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('reject_ad_request1', id=x.id) }}">
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                    {%endif%}
+                    {{x.status}}
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>    
+
+
+    </table>
+</body>
+</html>

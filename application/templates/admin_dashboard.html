@@ -1,0 +1,127 @@
+<!-- application/templates/admin_dashboard.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Plotly.js -->> 
+    
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <!-- Search Form -->
+    <form method="POST" action="{{ url_for('admin_dashboard') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="campaign_id">Select Campaign:</label>
+            {{ form.campaign_id(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+
+
+    {% if ad_requests %}
+    <h2>Ad Requests for Campaign ID: {{ campaign_id }}</h2>
+    <div id="box">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var boxData = {{ box_json | safe }};
+            console.log(boxData);  // Log the boxData to inspect its structure in the browser console
+    
+            // Check if boxData is valid and has the expected structure
+            if (boxData && boxData.data && boxData.layout) {
+                Plotly.newPlot('box', boxData.data, boxData.layout);
+            } else {
+                console.error('Invalid boxData format:', boxData);
+            }
+        });
+        
+    </script>
+    </div>
+    {% endif %}
+
+
+    <!-- Plotly Graph -->
+    <div id="campaigns_graph">
+        <!-- Render Plotly graph using JSON -->
+        <script>
+            var campaigns_graph_data = {{ campaigns_graph | safe }};
+            Plotly.plot('campaigns_graph', campaigns_graph_data);
+        </script>
+    </div>
+    <div id="pie-chart"></div>
+
+    <script>
+        var pieData = {{ pie_chart|safe }};
+        var layout = {
+            title: 'Distribution of Campaigns by Visibility'
+        };
+        Plotly.newPlot('pie-chart', pieData.data, layout);
+    </script>
+    <h2>All Campaigns</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name of sponser</th>
+                <th>industry</th>
+                <th>comapny</th>
+                <th>Flag</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in sp %}
+            <tr>
+                <td>{{ s.username1 }}</td>
+                <td>{{ s.industry }}</td>
+                <td>{{ s.company }}</td>
+                <td>
+                    {% if not s.is_flagged %}
+        <form method="POST" action="{{ url_for('flag_sponsor', s_id=s.id) }}" style="display:inline;">
+            <button type="submit" class="btn btn-warning">Flag</button>
+        </form>
+             {% else %}
+             <span>{{ s.is_flagged }}</span>
+        {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h2>All Influencers</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name of influencer</th>
+                <th>category</th>
+                <th>Number of followers</th>
+                <th>Flag</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in inf %}
+            <tr>
+                <td>{{ user.username2}}</td>
+                <td>{{ user.category }}</td>
+                <td>{{ user.reach }}</td>
+                <td>
+                    {% if not user.is_flagged %}
+                    <form method="POST" action="{{ url_for('flag_user', id=user.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">Flag</button>
+                    </form>
+                    {% else %}
+                    <span>Flagged</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

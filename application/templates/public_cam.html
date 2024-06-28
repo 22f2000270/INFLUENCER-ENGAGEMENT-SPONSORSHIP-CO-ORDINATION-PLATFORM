@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Campaigns</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <form action="{{ url_for('search_public') }}" method="GET">
+        <div class="form-group">
+        <input type="text" name="query" placeholder="Search for campaigns">
+  
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+    </form>
+    <ul class="list-group">
+        <li>
+            {%for i in m%}
+            {{i.campaign.name}} have {{i.status}} your request.
+            {%endfor%}
+        </li>
+    </ul>
+
+    <div class="container">
+        <h1>Public Campaigns</h1>
+        <ul>{%if c%}
+            <h2>Search Results</h2>
+            {% for campaign in c %}
+            <li>
+                <h2>{{ campaign.name }}</h2>
+                <p>{{ campaign.description }}</p>
+                <p>Start Date: {{ campaign.start_date }}</p>
+                <p>End Date: {{ campaign.end_date }}</p>
+                <p>Budget: {{ campaign.budget }}</p>
+                <p>Goals: {{ campaign.goals }}</p>
+                <a href="{{ url_for('request_status', id=campaign.id) }}">SEND REQUEST</a>
+            </li>
+        {% endfor %}
+            {%endif%}
+            {% for campaign in campaigns %}
+                <li>
+                    <h2>{{ campaign.name }}</h2>
+                    <p>{{ campaign.description }}</p>
+                    <p>Start Date: {{ campaign.start_date }}</p>
+                    <p>End Date: {{ campaign.end_date }}</p>
+                    <p>Budget: {{ campaign.budget }}</p>
+                    <p>Goals: {{ campaign.goals }}</p>
+                    <a href="{{ url_for('request_status', id=campaign.id) }}">SEND REQUEST</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

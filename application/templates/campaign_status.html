@@ -1,0 +1,54 @@
+<!-- application/templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Engagement and Sponsorship Coordination Platform</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+   
+        <h1>hey {{username}}</h1>
+            <h1> here is the Campaign Status </h1>
+        <div class="container">
+        <h2>Public Campaign</h2>
+        <ul class="list-group">
+            {% for campaign in campaigns %}
+                {%if campaign.visibility=='public'%}
+                <li>{{ campaign.name }} 
+                    <a href="{{ url_for('campaign_status1', id=campaign.id) }}">for more info</a>
+                    <p>{{campaign.visibility}}</p>
+                    <form method="POST" action="{{ url_for('delete_campaign', id=campaign.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('edit', id=campaign.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                    </form>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+        </ul>
+        <h2>Private Campaign</h2>
+        <ul class="list-group">
+            {% for campaign in campaigns %}
+            {%if campaign.visibility=='private'%}
+            <li>{{ campaign.name }} 
+                <a href="{{ url_for('campaign_status1', id=campaign.id) }}">for more info</a>
+                <p>{{campaign.visibility}}</p>
+                <form method="POST" action="{{ url_for('delete_campaign', id=campaign.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <form method="POST" action="{{ url_for('edit', id=campaign.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+            </li>
+            {%endif%}
+        {% endfor %}
+        </ul>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ username }}</h2>
+        <h1 style="color: red; font-weight: bold;">{{i.is_flagged}}</h1>
+        <!-- Profile Section -->
+        <a href="{{ url_for('public_cam') }}">SEARCH FOR PUBLIC CAMPAIGN</a>
+        
+        <!-- Ad Requests Section -->
+        <section id="ad-requests">
+            <h3>Ad Requests</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Campaign</th>
+                        <th>Messages</th>
+                        <th>Requirements</th>
+                        <th>Payment Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ad_request in ad_requests %}
+                    <tr>
+                        <td>{{ ad_request.campaign.name }}</td>
+                        <td>{{ ad_request.messages }}</td>
+                        <td>{{ ad_request.requirements }}</td>
+                        <td>{{ ad_request.payment_amount }}</td>
+                        <td>{{ ad_request.status }}</td>
+                        <td>
+                            {% if ad_request.status == 'Pending' %}
+                                    <form method="POST" action="{{ url_for('accept_ad_request', id=ad_request.id) }}">
+                                        <button type="submit" class="btn btn-success">Accept</button>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('reject_ad_request', id=ad_request.id) }}">
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                            {% elif ad_request.status == 'Accepted' %}
+                                    <span class="text-success">Accepted </span>
+                            {% elif ad_request.status == 'Rejected' %}
+                                    <span class="text-danger">Rejected</span>
+                            {% endif %}
+                                    <form method="POST" action="{{ url_for('info', id=ad_request.id) }}">
+                                        <button type="submit" class="btn btn-info">Info</button>
+                                    </form>
+                           
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+       
+    </div>
+</body>
+</html>
